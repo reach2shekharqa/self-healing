@@ -6,8 +6,9 @@ import java.util.List;
 public class DOMSnapshot {
 
     private String url;
+    private String title;
 
-    private final List<DOMElementSnapshot> elements = new ArrayList<>();
+    private List<ElementSnapshot> elements = new ArrayList<>();
 
     public String getUrl() {
         return url;
@@ -17,12 +18,19 @@ public class DOMSnapshot {
         this.url = url;
     }
 
-    public List<DOMElementSnapshot> getElements() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<ElementSnapshot> getElements() {
         return elements;
     }
 
-    public void addElement(DOMElementSnapshot element) {
-        elements.add(element);
+    public void setElements(List<ElementSnapshot> elements) {
+        this.elements = elements;
     }
-    
 }

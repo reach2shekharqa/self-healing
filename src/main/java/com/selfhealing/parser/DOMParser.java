@@ -1,20 +1,23 @@
 package com.selfhealing.parser;
 
+import com.selfhealing.model.DOMSnapshot;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.selfhealing.model.DOMSnapshot;
-
 public class DOMParser {
+
+    private final DOMElementExtractor extractor = new DOMElementExtractor();
 
     public DOMSnapshot parse(String url, String html) {
 
         Document document = Jsoup.parse(html);
 
         DOMSnapshot snapshot = new DOMSnapshot();
-        snapshot.setUrl(url);
 
-        System.out.println("Page Title : " + document.title());
+        snapshot.setUrl(url);
+        snapshot.setTitle(document.title());
+
+        snapshot.setElements(extractor.extract(document));
 
         return snapshot;
     }

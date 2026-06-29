@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DOMElementSnapshot {
+public class ElementSnapshot {
 
     private String tag;
     private String id;
@@ -18,7 +18,7 @@ public class DOMElementSnapshot {
     private String cssSelector;
 
     private List<String> classes = new ArrayList<>();
-    
+
     private Map<String, String> attributes = new HashMap<>();
 
     public String getTag() {
@@ -99,5 +99,13 @@ public class DOMElementSnapshot {
 
     public void setClasses(List<String> classes) {
         this.classes = classes;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
     }
 }
