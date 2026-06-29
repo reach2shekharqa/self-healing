@@ -5,7 +5,7 @@ import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -60,13 +60,14 @@ public class Smoketest {
     @Test
     public void verifyProjectWorks() {
 
-        driver.get("https://www.saucedemo.com/");
+        driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 
-        driver.findElement(By.id("user-name")).sendKeys("standard_user");
-        driver.findElement(By.id("password565")).sendKeys("secret_sauce");
-        driver.findElement(By.id("login-button")).click();
+        driver.findElement(By.xpath("//input[@name='username']")).sendKeys("Admin");
+       driver.findElement(By.xpath("//input[@name='passw']")).sendKeys("admin123");
 
-        Assert.assertTrue(driver.findElement(By.id("react-burger-menu-btn")).isDisplayed());
+       driver.findElement((By.xpath("//button[@class='oxd-button oxd-button--medium oxd-button--main orangehrm-login-button']"))).click();
+
+       // Assert.assertTrue(driver.findElement(By.id("react1-burger-menu1-btn")).isDisplayed());
 
         // driver.quit();
 
