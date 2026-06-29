@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>com.selfhealing</groupId>
+    <groupId>io.github.reach2shekharqa</groupId>
     <artifactId>self-healing-core</artifactId>
     <version>1.0.0</version>
 
