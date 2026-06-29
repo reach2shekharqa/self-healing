@@ -11,6 +11,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.selfhealing.driver.HealingWebDriver;
+import com.selfhealing.healing.SelfHealingEngine;
+import com.selfhealing.matcher.LocatorMatcher;
+import com.selfhealing.model.ElementFingerprintBuilder;
+import com.selfhealing.parser.DOMParser;
 
 public class Smoketest {
 
@@ -21,10 +25,28 @@ public class Smoketest {
 
         WebDriver seleniumDriver = new ChromeDriver();
 
-        seleniumDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        seleniumDriver.manage().window().maximize();
+        seleniumDriver.manage()
+                .timeouts()
+                .implicitlyWait(Duration.ofSeconds(5));
 
-        driver = new HealingWebDriver(seleniumDriver);
+        seleniumDriver.manage()
+                .window()
+                .maximize();
+
+        DOMParser parser = new DOMParser();
+
+        LocatorMatcher matcher = new LocatorMatcher();
+
+        ElementFingerprintBuilder builder = new ElementFingerprintBuilder();
+
+        SelfHealingEngine engine = new SelfHealingEngine(
+                parser,
+                matcher,
+                builder);
+
+        driver = new HealingWebDriver(
+                seleniumDriver,
+                engine);
 
     }
 

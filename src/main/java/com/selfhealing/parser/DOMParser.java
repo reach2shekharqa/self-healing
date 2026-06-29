@@ -1,24 +1,38 @@
 package com.selfhealing.parser;
 
 import com.selfhealing.model.DOMSnapshot;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+
 
 public class DOMParser {
 
-    private final DOMElementExtractor extractor = new DOMElementExtractor();
 
-    public DOMSnapshot parse(String url, String html) {
+    private final DOMElementExtractor extractor;
 
-        Document document = Jsoup.parse(html);
 
-        DOMSnapshot snapshot = new DOMSnapshot();
+    public DOMParser() {
+        this.extractor = new DOMElementExtractor();
+    }
+
+
+    public DOMSnapshot parse(
+            String url,
+            String html
+    ) {
+
+
+        DOMSnapshot snapshot =
+                new DOMSnapshot();
+
 
         snapshot.setUrl(url);
-        snapshot.setTitle(document.title());
 
-        snapshot.setElements(extractor.extract(document));
+
+        snapshot.setElements(
+                extractor.extract(html)
+        );
+
 
         return snapshot;
     }
+
 }
