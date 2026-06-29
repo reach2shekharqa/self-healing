@@ -10,11 +10,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.selfhealing.config.HealingConfig;
 import com.selfhealing.driver.HealingWebDriver;
+import com.selfhealing.factory.HealingFactory;
 import com.selfhealing.healing.SelfHealingEngine;
-import com.selfhealing.matcher.LocatorMatcher;
-import com.selfhealing.model.ElementFingerprintBuilder;
-import com.selfhealing.parser.DOMParser;
 
 public class Smoketest {
 
@@ -33,16 +32,9 @@ public class Smoketest {
                 .window()
                 .maximize();
 
-        DOMParser parser = new DOMParser();
+        HealingConfig config = new HealingConfig();
 
-        LocatorMatcher matcher = new LocatorMatcher();
-
-        ElementFingerprintBuilder builder = new ElementFingerprintBuilder();
-
-        SelfHealingEngine engine = new SelfHealingEngine(
-                parser,
-                matcher,
-                builder);
+        SelfHealingEngine engine = HealingFactory.createEngine(config);
 
         driver = new HealingWebDriver(
                 seleniumDriver,
@@ -53,23 +45,27 @@ public class Smoketest {
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
 
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
 
     }
 
     @Test
     public void verifyProjectWorks() {
 
-        driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+        driver.get(
+                "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 
-        driver.findElement(By.xpath("//input[@name='username']")).sendKeys("Admin");
-       driver.findElement(By.xpath("//input[@name='passw']")).sendKeys("admin123");
+        driver.findElement(
+                By.xpath("//input[@name='username']")).sendKeys("Admin");
 
-       driver.findElement((By.xpath("//button[@class='oxd-button oxd-button--medium oxd-button--main orangehrm-login-button']"))).click();
+        driver.findElement(
+                By.xpath("//input[@name='passw']")).sendKeys("admin123");
 
-       // Assert.assertTrue(driver.findElement(By.id("react1-burger-menu1-btn")).isDisplayed());
-
-        // driver.quit();
+        driver.findElement(
+                By.xpath("//button[@class='oxd-button oxd-button--medium oxd-button--main orangehrm-login-button']"))
+                .click();
 
     }
 

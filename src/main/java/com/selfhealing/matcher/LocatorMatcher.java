@@ -1,5 +1,6 @@
 package com.selfhealing.matcher;
 
+import com.selfhealing.config.HealingConfig;
 import com.selfhealing.healing.CandidateGenerator;
 import com.selfhealing.model.DOMSnapshot;
 import com.selfhealing.model.ElementSnapshot;
@@ -13,12 +14,22 @@ public class LocatorMatcher {
 
     private final CandidateGenerator candidateGenerator;
 
+    private final SimilarityCalculator calculator;
 
-    public LocatorMatcher() {
+    private final HealingConfig config;
+
+
+
+    public LocatorMatcher(
+            HealingConfig config) {
 
         this.candidateGenerator =
                 new CandidateGenerator();
 
+        this.calculator =
+                new SimilarityCalculator();
+
+        this.config = config;
     }
 
 
@@ -70,6 +81,7 @@ public class LocatorMatcher {
 
 
 
+
     /*
      * Step 3:
      * Rank candidates and find best match
@@ -79,10 +91,6 @@ public class LocatorMatcher {
             By failedLocator) {
 
 
-        SimilarityCalculator calculator =
-                new SimilarityCalculator();
-
-
         ElementSnapshot bestCandidate = null;
 
 
@@ -90,7 +98,19 @@ public class LocatorMatcher {
 
 
 
-        for(ElementSnapshot element : candidates) {
+        int limit = Math.min(
+                candidates.size(),
+                config.getMaxCandidates()
+        );
+
+
+
+        for(int i = 0; i < limit; i++) {
+
+
+            ElementSnapshot element =
+                    candidates.get(i);
+
 
 
             double score =
@@ -98,6 +118,7 @@ public class LocatorMatcher {
                             failedLocator.toString(),
                             element
                     );
+
 
 
             System.out.println(
@@ -111,14 +132,18 @@ public class LocatorMatcher {
 
 
 
-            if(score > highestScore) {
+            if(score >= config.getSimilarityThreshold()
+                    && score > highestScore) {
+
 
                 highestScore = score;
+
                 bestCandidate = element;
 
             }
 
         }
+
 
 
         System.out.println(
