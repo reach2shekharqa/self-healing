@@ -6,172 +6,125 @@ import com.selfhealing.model.ElementSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CandidateGenerator {
 
+        public List<ElementSnapshot> generate(
+                        DOMSnapshot snapshot,
+                        String failedLocator) {
 
-    public List<ElementSnapshot> generate(
-            DOMSnapshot snapshot,
-            String failedLocator) {
+                List<ElementSnapshot> candidates = new ArrayList<>();
 
+                String searchValue = extractLocatorValue(failedLocator);
 
-        List<ElementSnapshot> candidates =
-                new ArrayList<>();
+                for (ElementSnapshot element : snapshot.getElements()) {
 
+                        String tag = element.getTag();
 
-        String searchValue =
-                extractLocatorValue(failedLocator);
+                        if (tag == null) {
+                                continue;
+                        }
 
+                        String id = element.getAttributes()
+                                        .get("id");
 
+                        if (id != null && id.isBlank()) {
+                                id = null;
+                        }
 
-        for(ElementSnapshot element :
-                snapshot.getElements()) {
+                        /*
+                         * Strong ID match
+                         */
+                        if (id != null
+                                        && isSimilar(id, searchValue)) {
 
+                                candidates.add(element);
 
-            String tag =
-                    element.getTag();
+                                continue;
+                        }
 
+                        /*
+                         * Only allow input elements
+                         * for password/user/email healing
+                         */
+                        if (tag.equalsIgnoreCase("input")) {
 
-            if(tag == null) {
-                continue;
-            }
+                                String type = element.getAttributes()
+                                                .get("type");
 
+                                String name = element.getAttributes()
+                                                .get("name");
 
+                                if (name != null
+                                                && isSimilar(name, searchValue)) {
 
-            String id =
-                    element.getAttributes()
-                            .get("id");
+                                        candidates.add(element);
 
+                                        continue;
+                                }
 
+                                if (type != null
+                                                && isSimilar(type, searchValue)) {
 
-            /*
-             * Ignore empty ids
-             */
-            if(id != null && id.isBlank()) {
+                                        candidates.add(element);
 
-                id = null;
+                                }
 
-            }
+                        }
 
+                }
 
+                return candidates;
+        }
 
-            String text =
-                    element.getText();
+        private String extractLocatorValue(
+                        String locator) {
 
+                /*
+                 * Example:
+                 * By.id: react-burger-menu-btn1
+                 */
 
+                if (locator.contains(":")) {
 
-            /*
-             * Candidate 1:
-             * Similar ID
-             */
-            if(id != null
-                    && !tag.equalsIgnoreCase("div")
-                    && isSimilar(id, searchValue)) {
+                        return locator.substring(
+                                        locator.indexOf(":") + 1).trim();
 
+                }
 
-                candidates.add(element);
-                continue;
-
-            }
-
-
-
-            /*
-             * Candidate 2:
-             * Similar visible text
-             */
-            if(text != null
-                    && !text.isBlank()
-                    && isSimilar(text, searchValue)) {
-
-
-                candidates.add(element);
-
-            }
+                return locator;
 
         }
 
+        private boolean isSimilar(
+                        String value,
+                        String target) {
 
-        return candidates;
+                value = value.toLowerCase();
 
-    }
+                target = target.toLowerCase();
 
+                /*
+                 * Avoid very short comparisons
+                 */
+                if (value.length() < 3
+                                || target.length() < 3) {
 
+                        return false;
 
+                }
 
+                int length = Math.min(
+                                5,
+                                target.length());
 
-    private String extractLocatorValue(
-            String locator) {
+                String prefix = target.substring(
+                                0,
+                                length);
 
-
-        /*
-         * Example:
-         * By.id: react-burger-menu-btn1
-         */
-
-        if(locator.contains(":")) {
-
-            return locator.substring(
-                    locator.indexOf(":") + 1
-            ).trim();
-
-        }
-
-
-        return locator;
-
-    }
-
-
-
-
-
-    private boolean isSimilar(
-            String value,
-            String target) {
-
-
-        value =
-                value.toLowerCase();
-
-
-        target =
-                target.toLowerCase();
-
-
-
-        /*
-         * Avoid very short comparisons
-         */
-        if(value.length() < 3
-                || target.length() < 3) {
-
-            return false;
+                return value.contains(prefix)
+                                ||
+                                target.contains(value);
 
         }
-
-
-
-        int length =
-                Math.min(
-                        5,
-                        target.length()
-                );
-
-
-
-        String prefix =
-                target.substring(
-                        0,
-                        length
-                );
-
-
-
-        return value.contains(prefix)
-                ||
-                target.contains(value);
-
-    }
 
 }

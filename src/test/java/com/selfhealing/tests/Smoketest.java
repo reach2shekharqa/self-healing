@@ -63,10 +63,10 @@ public class Smoketest {
         driver.get("https://www.saucedemo.com/");
 
         driver.findElement(By.id("user-name")).sendKeys("standard_user");
-        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        driver.findElement(By.id("password565")).sendKeys("secret_sauce");
         driver.findElement(By.id("login-button")).click();
 
-        Assert.assertTrue(driver.findElement(By.id("react-burger-menu-btn1")).isDisplayed());
+        Assert.assertTrue(driver.findElement(By.id("react-burger-menu-btn")).isDisplayed());
 
         // driver.quit();
 
