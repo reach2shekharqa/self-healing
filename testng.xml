@@ -6,7 +6,7 @@
 
         <classes>
 
-            <class name="tests.Smoketest"/>
+            <class name="com.selfhealing.tests.Smoketest"/>
 
         </classes>
 
