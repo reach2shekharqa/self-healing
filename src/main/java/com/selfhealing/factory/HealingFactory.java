@@ -2,7 +2,6 @@ package com.selfhealing.factory;
 
 import com.selfhealing.ai.agent.AIHealingAgent;
 import com.selfhealing.ai.config.AIConfig;
-import com.selfhealing.ai.config.AIConfigBuilder;
 import com.selfhealing.ai.provider.LLMClient;
 import com.selfhealing.ai.provider.LLMProviderFactory;
 import com.selfhealing.config.HealingConfig;
@@ -17,45 +16,60 @@ public final class HealingFactory {
 
 
     private HealingFactory() {
+
     }
 
 
+
+
     public static SelfHealingEngine createEngine(
-            HealingConfig healingConfig) {
-
-
-        /*
-         * AI Configuration
-         */
-        AIConfig aiConfig =
-                AIConfigBuilder.build();
+            HealingConfig healingConfig,
+            AIConfig aiConfig) {
 
 
 
         /*
-         * LLM Provider
+         * Create AI layer
          */
         LLMClient llmClient =
-                LLMProviderFactory.create(
-                        aiConfig);
+                null;
 
 
 
-        /*
-         * AI Healing Agent
-         */
         AIHealingAgent aiHealingAgent =
-                new AIHealingAgent(
-                        llmClient);
+                null;
 
 
 
         /*
-         * Locator Matcher
+         * AI is optional.
+         * If disabled, local healing continues.
          */
+        if (aiConfig != null &&
+                aiConfig.isEnabled()) {
+
+
+
+            llmClient =
+                    LLMProviderFactory.create(
+                            aiConfig);
+
+
+
+            aiHealingAgent =
+                    new AIHealingAgent(
+                            llmClient);
+        }
+
+
+
+
+
         LocatorMatcher locatorMatcher =
                 new LocatorMatcher(
                         healingConfig);
+
+
 
 
 

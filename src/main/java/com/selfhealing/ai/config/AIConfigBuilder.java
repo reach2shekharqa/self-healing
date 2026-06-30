@@ -1,23 +1,28 @@
 package com.selfhealing.ai.config;
 
 
-public class AIConfigBuilder {
+public final class AIConfigBuilder {
+
+
+    private AIConfigBuilder() {
+
+    }
+
 
 
     public static AIConfig build() {
 
-        AIConfig config = new AIConfig();
 
         /*
-         * Milestone 5.1
-         * Default AI provider
+         * Load configuration from
+         * consumer project resources.
+         *
+         * Example:
+         * src/test/resources/healing.properties
+         *
          */
-        config.setProvider(
-                AIProvider.GROQ
-        );
+        return AIConfigLoader.load();
 
-
-        return config;
     }
 
 }

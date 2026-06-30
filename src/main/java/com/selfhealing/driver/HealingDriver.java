@@ -1,41 +1,82 @@
 package com.selfhealing.driver;
 
+import com.selfhealing.ai.config.AIConfig;
 import com.selfhealing.config.HealingConfig;
 import com.selfhealing.factory.HealingFactory;
+
 import org.openqa.selenium.WebDriver;
+
 
 public final class HealingDriver {
 
+
     private HealingDriver() {
-        // Utility class
+
     }
 
+
+
+
     /**
-     * Creates a self-healing WebDriver using default configuration.
-     *
-     * @param driver Original Selenium WebDriver
-     * @return Healing-enabled WebDriver
+     * Creates self-healing driver
+     * using default configuration.
      */
-    public static WebDriver create(WebDriver driver) {
+    public static WebDriver create(
+            WebDriver driver) {
 
-        return create(driver, new HealingConfig());
+
+        return create(
+                driver,
+                new HealingConfig(),
+                new AIConfig()
+        );
 
     }
 
+
+
+
     /**
-     * Creates a self-healing WebDriver using custom configuration.
-     *
-     * @param driver Original Selenium WebDriver
-     * @param config Healing framework configuration
-     * @return Healing-enabled WebDriver
+     * Creates self-healing driver
+     * using healing configuration.
      */
     public static WebDriver create(
             WebDriver driver,
-            HealingConfig config) {
+            HealingConfig healingConfig) {
+
+
+        return create(
+                driver,
+                healingConfig,
+                new AIConfig()
+        );
+
+    }
+
+
+
+
+    /**
+     * Creates self-healing driver
+     * using healing + AI configuration.
+     *
+     * Consumer controls AI settings.
+     */
+    public static WebDriver create(
+            WebDriver driver,
+            HealingConfig healingConfig,
+            AIConfig aiConfig) {
+
 
         return new HealingWebDriver(
+
                 driver,
-                HealingFactory.createEngine(config)
+
+                HealingFactory.createEngine(
+                        healingConfig,
+                        aiConfig
+                )
+
         );
 
     }
