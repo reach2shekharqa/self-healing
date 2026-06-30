@@ -2,6 +2,8 @@ package com.selfhealing.driver;
 
 import com.selfhealing.healing.SelfHealingEngine;
 import com.selfhealing.model.HealingContext;
+import com.selfhealing.report.ReportGenerator;
+
 import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -45,8 +47,7 @@ public class HealingWebDriver implements WebDriver {
                     locator,
                     driver.getCurrentUrl(),
                     driver.getPageSource(),
-                    ex
-            );
+                    ex);
 
             return healingEngine.heal(context);
         }
@@ -104,6 +105,16 @@ public class HealingWebDriver implements WebDriver {
 
     @Override
     public void quit() {
-        driver.quit();
+
+        try {
+
+            // Generate healing reports before closing browser
+            ReportGenerator.generate();
+
+        } finally {
+
+            // Always close the browser
+            driver.quit();
+        }
     }
 }
