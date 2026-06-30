@@ -16,10 +16,9 @@ public final class HealingDriver {
 
 
 
-
     /**
      * Creates self-healing driver
-     * using default configuration.
+     * without AI.
      */
     public static WebDriver create(
             WebDriver driver) {
@@ -28,9 +27,8 @@ public final class HealingDriver {
         return create(
                 driver,
                 new HealingConfig(),
-                new AIConfig()
+                null
         );
-
     }
 
 
@@ -38,7 +36,8 @@ public final class HealingDriver {
 
     /**
      * Creates self-healing driver
-     * using healing configuration.
+     * with custom healing configuration
+     * without AI.
      */
     public static WebDriver create(
             WebDriver driver,
@@ -48,9 +47,8 @@ public final class HealingDriver {
         return create(
                 driver,
                 healingConfig,
-                new AIConfig()
+                null
         );
-
     }
 
 
@@ -58,9 +56,7 @@ public final class HealingDriver {
 
     /**
      * Creates self-healing driver
-     * using healing + AI configuration.
-     *
-     * Consumer controls AI settings.
+     * with optional AI configuration.
      */
     public static WebDriver create(
             WebDriver driver,
@@ -76,9 +72,6 @@ public final class HealingDriver {
                         healingConfig,
                         aiConfig
                 )
-
         );
-
     }
-
 }

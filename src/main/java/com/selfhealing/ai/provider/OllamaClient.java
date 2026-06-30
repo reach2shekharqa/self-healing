@@ -8,7 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 
-public class NvidiaClient implements LLMClient {
+public class OllamaClient implements LLMClient {
 
 
     private final AIConfig config;
@@ -19,7 +19,7 @@ public class NvidiaClient implements LLMClient {
 
 
 
-    public NvidiaClient(
+    public OllamaClient(
             AIConfig config) {
 
         this.config = config;
@@ -34,7 +34,7 @@ public class NvidiaClient implements LLMClient {
 
 
         System.out.println(
-                "\n========== Sending Prompt to NVIDIA ==========");
+                "\n========== Sending Prompt to Ollama ==========");
 
         System.out.println(prompt);
 
@@ -56,7 +56,10 @@ public class NvidiaClient implements LLMClient {
                           "content": "%s"
                         }
                       ],
-                      "temperature": 0.1
+                      "stream": false,
+                      "options": {
+                        "temperature": 0.1
+                      }
                     }
                     """
                     .formatted(
@@ -66,24 +69,20 @@ public class NvidiaClient implements LLMClient {
 
 
 
+
             HttpRequest request =
                     HttpRequest.newBuilder()
 
                             .uri(
                                     URI.create(
                                             config.getBaseUrl()
+                                            + "/api/chat"
                                     )
                             )
 
                             .header(
                                     "Content-Type",
                                     "application/json"
-                            )
-
-                            .header(
-                                    "Authorization",
-                                    "Bearer "
-                                    + config.getApiKey()
                             )
 
                             .POST(
@@ -105,7 +104,7 @@ public class NvidiaClient implements LLMClient {
 
 
             System.out.println(
-                    "\n========== NVIDIA Response ==========");
+                    "\n========== Ollama Response ==========");
 
             System.out.println(
                     response.body());
@@ -123,12 +122,13 @@ public class NvidiaClient implements LLMClient {
 
 
             throw new RuntimeException(
-                    "NVIDIA API call failed",
+                    "Ollama API call failed",
                     e
             );
         }
 
     }
+
 
 
 

@@ -11,80 +11,51 @@ import com.selfhealing.matcher.LocatorMatcher;
 import com.selfhealing.model.ElementFingerprintBuilder;
 import com.selfhealing.parser.DOMParser;
 
-
 public final class HealingFactory {
 
+        private HealingFactory() {
 
-    private HealingFactory() {
-
-    }
-
-
-
-
-    public static SelfHealingEngine createEngine(
-            HealingConfig healingConfig,
-            AIConfig aiConfig) {
-
-
-
-        /*
-         * Create AI layer
-         */
-        LLMClient llmClient =
-                null;
-
-
-
-        AIHealingAgent aiHealingAgent =
-                null;
-
-
-
-        /*
-         * AI is optional.
-         * If disabled, local healing continues.
-         */
-        if (aiConfig != null &&
-                aiConfig.isEnabled()) {
-
-
-
-            llmClient =
-                    LLMProviderFactory.create(
-                            aiConfig);
-
-
-
-            aiHealingAgent =
-                    new AIHealingAgent(
-                            llmClient);
         }
 
+        public static SelfHealingEngine createEngine(
+                        HealingConfig healingConfig,
+                        AIConfig aiConfig) {
 
+                /*
+                 * Create AI layer
+                 */
+                LLMClient llmClient = null;
 
+                AIHealingAgent aiHealingAgent = null;
 
+                /*
+                 * AI is optional.
+                 * If disabled, local healing continues.
+                 */
+                if (aiConfig != null &&
+                                aiConfig.isEnabled()) {
 
-        LocatorMatcher locatorMatcher =
-                new LocatorMatcher(
-                        healingConfig);
+                        llmClient = LLMProviderFactory.create(
+                                        aiConfig);
 
+                        aiHealingAgent = new AIHealingAgent(
+                                        llmClient);
+                }
 
+                LocatorMatcher locatorMatcher = new LocatorMatcher(
+                                healingConfig);
 
+                return new SelfHealingEngine(
 
+                                new DOMParser(),
 
-        return new SelfHealingEngine(
+                                locatorMatcher,
 
-                new DOMParser(),
+                                new ElementFingerprintBuilder(),
 
-                locatorMatcher,
+                                new DecisionContextBuilder(),
 
-                new ElementFingerprintBuilder(),
-
-                new DecisionContextBuilder(),
-
-                aiHealingAgent
-        );
-    }
+                                aiHealingAgent);
+        }
 
 }
