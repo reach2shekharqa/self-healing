@@ -1,5 +1,7 @@
 package com.selfhealing.config;
 
+import com.selfhealing.ai.config.AIConfig;
+
 public class HealingConfig {
 
     /**
@@ -18,12 +20,22 @@ public class HealingConfig {
     private boolean loggingEnabled;
 
     /**
+     * AI configuration.
+     */
+    private AIConfig aiConfig;
+
+    /**
      * Creates a configuration with sensible defaults.
      */
     public HealingConfig() {
+
         this.similarityThreshold = 0.80;
+
         this.maxCandidates = 5;
+
         this.loggingEnabled = true;
+
+        this.aiConfig = new AIConfig();
     }
 
     public double getSimilarityThreshold() {
@@ -48,5 +60,27 @@ public class HealingConfig {
 
     public void setLoggingEnabled(boolean loggingEnabled) {
         this.loggingEnabled = loggingEnabled;
+    }
+
+    public AIConfig getAiConfig() {
+        return aiConfig;
+    }
+
+    public void setAiConfig(AIConfig aiConfig) {
+        this.aiConfig = aiConfig;
+    }
+
+    public boolean isAIEnabled() {
+        return aiConfig != null && aiConfig.isEnabled();
+    }
+
+    @Override
+    public String toString() {
+        return "HealingConfig{" +
+                "similarityThreshold=" + similarityThreshold +
+                ", maxCandidates=" + maxCandidates +
+                ", loggingEnabled=" + loggingEnabled +
+                ", aiConfig=" + aiConfig +
+                '}';
     }
 }

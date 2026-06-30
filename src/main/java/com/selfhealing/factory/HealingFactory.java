@@ -1,46 +1,75 @@
 package com.selfhealing.factory;
 
+import com.selfhealing.ai.agent.AIHealingAgent;
+import com.selfhealing.ai.config.AIConfig;
+import com.selfhealing.ai.config.AIConfigBuilder;
+import com.selfhealing.ai.provider.LLMClient;
+import com.selfhealing.ai.provider.LLMProviderFactory;
 import com.selfhealing.config.HealingConfig;
-
+import com.selfhealing.decision.DecisionContextBuilder;
 import com.selfhealing.healing.SelfHealingEngine;
 import com.selfhealing.matcher.LocatorMatcher;
 import com.selfhealing.model.ElementFingerprintBuilder;
 import com.selfhealing.parser.DOMParser;
 
+
 public final class HealingFactory {
+
 
     private HealingFactory() {
     }
 
 
-    public static SelfHealingEngine createEngine() {
-
-        return createEngine(new HealingConfig());
-    }
-
-
-
     public static SelfHealingEngine createEngine(
-            HealingConfig config) {
+            HealingConfig healingConfig) {
 
 
-        DOMParser domParser =
-                new DOMParser();
+        /*
+         * AI Configuration
+         */
+        AIConfig aiConfig =
+                AIConfigBuilder.build();
 
 
+
+        /*
+         * LLM Provider
+         */
+        LLMClient llmClient =
+                LLMProviderFactory.create(
+                        aiConfig);
+
+
+
+        /*
+         * AI Healing Agent
+         */
+        AIHealingAgent aiHealingAgent =
+                new AIHealingAgent(
+                        llmClient);
+
+
+
+        /*
+         * Locator Matcher
+         */
         LocatorMatcher locatorMatcher =
-                new LocatorMatcher(config);
-
-
-        ElementFingerprintBuilder fingerprintBuilder =
-                new ElementFingerprintBuilder();
+                new LocatorMatcher(
+                        healingConfig);
 
 
 
         return new SelfHealingEngine(
-                domParser,
+
+                new DOMParser(),
+
                 locatorMatcher,
-                fingerprintBuilder
+
+                new ElementFingerprintBuilder(),
+
+                new DecisionContextBuilder(),
+
+                aiHealingAgent
         );
     }
 

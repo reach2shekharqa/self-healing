@@ -1,101 +1,90 @@
 package com.selfhealing.model;
 
-
 public class ElementFingerprintBuilder {
 
+    public ElementFingerprint build(ElementSnapshot element) {
 
-    public ElementFingerprint build(
-            ElementSnapshot element
-    ) {
+        ElementFingerprint fingerprint = new ElementFingerprint();
 
-        ElementFingerprint fingerprint =
-                new ElementFingerprint();
+        // Basic information
+        fingerprint.setTag(element.getTag());
+        fingerprint.setText(element.getText());
 
+        // ---------- Important Attributes ----------
 
-        fingerprint.setTag(
-                element.getTag()
-        );
+        addAttribute(fingerprint, "id", element.getId());
 
+        addAttribute(fingerprint, "name", element.getName());
 
-        fingerprint.setText(
-                element.getText()
-        );
+        addAttribute(fingerprint, "class", element.getClassName());
 
+        addAttribute(fingerprint, "type", element.getType());
 
-        if(element.getId() != null) {
+        addAttribute(fingerprint, "value", element.getValue());
 
-            fingerprint.getImportantAttributes()
-                    .put(
-                      "id",
-                      element.getId()
-                    );
-        }
+        addAttribute(fingerprint, "placeholder", element.getPlaceholder());
 
+        addAttribute(fingerprint, "role", element.getRole());
 
-        if(element.getClassName() != null) {
+        addAttribute(fingerprint, "aria-label", element.getAriaLabel());
 
-            fingerprint.getImportantAttributes()
-                    .put(
-                      "class",
-                      element.getClassName()
-                    );
-        }
+        addAttribute(fingerprint, "title", element.getTitle());
 
+        addAttribute(fingerprint, "href", element.getHref());
 
-        if(element.getRole() != null) {
+        addAttribute(fingerprint, "src", element.getSrc());
 
-            fingerprint.getImportantAttributes()
-                    .put(
-                      "role",
-                      element.getRole()
-                    );
-        }
-
-
-        if(element.getAriaLabel() != null) {
-
-            fingerprint.getImportantAttributes()
-                    .put(
-                      "aria-label",
-                      element.getAriaLabel()
-                    );
-        }
-
-
-        if(element.getPlaceholder() != null) {
-
-            fingerprint.getImportantAttributes()
-                    .put(
-                      "placeholder",
-                      element.getPlaceholder()
-                    );
-        }
-
+        addAttribute(fingerprint, "alt", element.getAlt());
 
         // Parent context
-        if(element.getParent()!=null) {
+        if (element.getParent() != null) {
 
-            fingerprint.setParentContext(
-                element.getParent().getTag()
-                + "."
-                + element.getParent().getClassName()
-            );
+            String parentContext =
+                    element.getParent().getTag();
+
+            if (element.getParent().getClassName() != null
+                    && !element.getParent().getClassName().isBlank()) {
+
+                parentContext += "." + element.getParent().getClassName();
+            }
+
+            fingerprint.setParentContext(parentContext);
         }
 
+        // Nearby Elements
+        for (ElementSnapshot sibling : element.getSiblings()) {
 
-        // Nearby elements
-        element.getSiblings()
-                .forEach(
-                    sibling ->
-                        fingerprint.getNearbyElements()
-                        .add(
-                          sibling.getTag()
-                          + ":"
-                          + sibling.getText()
-                        )
-                );
+            String nearby =
+                    sibling.getTag() + ":" + sibling.getText();
 
+            fingerprint.getNearbyElements().add(nearby);
+        }
+
+        /*
+         * Advanced properties.
+         * These will be populated in a later milestone.
+         */
+        fingerprint.setDisplayed(false);
+        fingerprint.setEnabled(false);
+        fingerprint.setDepth(0);
+        fingerprint.setXpath(null);
+        fingerprint.setCssSelector(null);
 
         return fingerprint;
+    }
+
+    /**
+     * Adds an attribute only when it has a non-empty value.
+     */
+    private void addAttribute(
+            ElementFingerprint fingerprint,
+            String key,
+            String value) {
+
+        if (value != null && !value.isBlank()) {
+
+            fingerprint.getImportantAttributes()
+                    .put(key, value);
+        }
     }
 }

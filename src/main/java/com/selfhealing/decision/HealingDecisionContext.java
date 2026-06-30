@@ -2,70 +2,156 @@ package com.selfhealing.decision;
 
 import com.selfhealing.model.ElementFingerprint;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 public class HealingDecisionContext {
 
-    private String failedLocator;
 
-    private String currentUrl;
+    private final String failedLocator;
 
-    private String pageTitle;
+    private final String currentUrl;
 
-    private String exceptionType;
+    private final String pageTitle;
 
-    private List<ElementFingerprint> candidateElements = new ArrayList<>();
+    private final String exceptionType;
+
+    private final String exceptionMessage;
+
+    private final boolean localHealingFailed;
+
+    private final double bestSimilarityScore;
+
+    private final String frameworkVersion;
+
+    private final List<ElementFingerprint> candidateElements;
 
 
-    public String getFailedLocator() {
-        return failedLocator;
-    }
 
-    public void setFailedLocator(String failedLocator) {
+    public HealingDecisionContext(
+            String failedLocator,
+            String currentUrl,
+            String pageTitle,
+            String exceptionType,
+            String exceptionMessage,
+            boolean localHealingFailed,
+            double bestSimilarityScore,
+            String frameworkVersion,
+            List<ElementFingerprint> candidateElements) {
+
+
         this.failedLocator = failedLocator;
-    }
 
-    public String getCurrentUrl() {
-        return currentUrl;
-    }
-
-    public void setCurrentUrl(String currentUrl) {
         this.currentUrl = currentUrl;
-    }
 
-    public String getPageTitle() {
-        return pageTitle;
-    }
-
-    public void setPageTitle(String pageTitle) {
         this.pageTitle = pageTitle;
-    }
 
-    public String getExceptionType() {
-        return exceptionType;
-    }
-
-    public void setExceptionType(String exceptionType) {
         this.exceptionType = exceptionType;
-    }
 
-    public List<ElementFingerprint> getCandidateElements() {
-        return candidateElements;
-    }
+        this.exceptionMessage = exceptionMessage;
 
-    public void setCandidateElements(List<ElementFingerprint> candidateElements) {
+        this.localHealingFailed = localHealingFailed;
+
+        this.bestSimilarityScore = bestSimilarityScore;
+
+        this.frameworkVersion = frameworkVersion;
+
         this.candidateElements = candidateElements;
     }
 
+
+
+
+
+    public String getFailedLocator() {
+
+        return failedLocator;
+    }
+
+
+
+    public String getCurrentUrl() {
+
+        return currentUrl;
+    }
+
+
+
+    public String getPageTitle() {
+
+        return pageTitle;
+    }
+
+
+
+    public String getExceptionType() {
+
+        return exceptionType;
+    }
+
+
+
+    public String getExceptionMessage() {
+
+        return exceptionMessage;
+    }
+
+
+
+    public boolean isLocalHealingFailed() {
+
+        return localHealingFailed;
+    }
+
+
+
+    public double getBestSimilarityScore() {
+
+        return bestSimilarityScore;
+    }
+
+
+
+    public String getFrameworkVersion() {
+
+        return frameworkVersion;
+    }
+
+
+
+    public List<ElementFingerprint> getCandidateElements() {
+
+        return candidateElements;
+    }
+
+
+
+
+
     @Override
     public String toString() {
+
         return "HealingDecisionContext{" +
-                "\nfailedLocator='" + failedLocator + '\'' +
-                ",\ncurrentUrl='" + currentUrl + '\'' +
-                ",\npageTitle='" + pageTitle + '\'' +
-                ",\nexceptionType='" + exceptionType + '\'' +
-                ",\ncandidateElements=" + candidateElements +
-                "\n}";
+
+                "failedLocator='" + failedLocator + '\'' +
+
+                ", currentUrl='" + currentUrl + '\'' +
+
+                ", pageTitle='" + pageTitle + '\'' +
+
+                ", exceptionType='" + exceptionType + '\'' +
+
+                ", exceptionMessage='" + exceptionMessage + '\'' +
+
+                ", localHealingFailed=" + localHealingFailed +
+
+                ", bestSimilarityScore=" + bestSimilarityScore +
+
+                ", frameworkVersion='" + frameworkVersion + '\'' +
+
+                ", candidateElements=" + candidateElements +
+
+                '}';
     }
+
 }
