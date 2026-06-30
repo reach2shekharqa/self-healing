@@ -19,7 +19,13 @@
     <name>Self Healing Core</name>
 
     <description>
-        Selenium self-healing automation framework core library
+        AI-powered Selenium self-healing framework with automatic DOM-based locator recovery and optional LLM-powered healing using Groq or NVIDIA. can use WebDriver driver = HealingDriver.create(new ChromeDriver()); "OR" HealingConfig config = HealingConfig.builder()
+        .provider(AIProvider.GROQ)
+        .apiKey("...")
+        .model("...")
+        .build();
+
+WebDriver driver = HealingDriver.create(new ChromeDriver(), config); 
     </description>
 
     <url>
