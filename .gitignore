@@ -1,3 +1,7 @@
 target/
 pom.xml.versionsBackup
 src/test/java/com/com/selfhealing/integration/
+.env
+*.properties
+config/*.json
+src/test/resources/*.properties
