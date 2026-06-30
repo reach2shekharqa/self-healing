@@ -1,2 +1,3 @@
 target/
 pom.xml.versionsBackup
+src/test/java/com/com/selfhealing/integration/
